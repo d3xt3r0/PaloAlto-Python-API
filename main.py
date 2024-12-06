@@ -2,6 +2,8 @@ import os
 from dotenv import load_dotenv
 import xml.etree.ElementTree as ET
 import requests
+from time import sleep
+import sys
 
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -65,6 +67,17 @@ def get_abuse_ip_list():
         f.write(response.text)
 
     print("File saved successfully")
+
+
+def fprint(line):
+
+    for x in line:
+        print(x, end='', flush=True)
+        sleep(0.1)
+
+
+def init():
+    fprint('Hi Welcome!\n')
     
 
 if __name__ == "__main__":
@@ -84,3 +97,5 @@ if __name__ == "__main__":
             if "successfully" in result.lower():
                 add_object_to_group(api_key,OBJECT_GROUP,object_name)
         print('IP addresses added to malicious group successfully')
+    
+    #init()
