@@ -58,15 +58,21 @@ def get_abuse_ip_list():
     params = {
     'confidenceMinimum': '90',
     }
-    
-
     response = requests.get('https://api.abuseipdb.com/api/v2/blacklist', params=params, headers=headers)
-
-
-    with open('ip_list.txt','w') as f:
+    with open('abuse_ip_list.txt','w') as f:
         f.write(response.text)
 
     print("File saved successfully")
+
+
+def blacklist_from_file(api_key, filename):
+    with open(filename, 'r') as file:
+        for ip in file.read().splitlines():
+            object_name = f'bl_{ip}'
+            result = create_object(api_key, object_name, ip)
+            if "successfully" in result.lower():
+                add_object_to_group(api_key,OBJECT_GROUP,object_name)
+                print('IP addresses added to malicious group successfully')
 
 
 def fprint(line):
@@ -78,24 +84,36 @@ def fprint(line):
 
 def init():
     fprint('Hi Welcome!\n')
+    fprint('Please choose option \n')
+    print(' [1] Fetch IP list from AbuseIPDB\n [2] Blacklist IP from file')
+
+    choice = input('Enter your choice: ')
+    print(choice)
+
+    try:
+        api_key = get_api_key(HOST_NAME,USERNAME,PASSWORD)
+    except Exception as e:
+        print(e)
+
+
+    if choice == '1':
+        try: 
+            get_abuse_ip_list()
+            blacklist_from_file(api_key, 'abuse_ip_list.txt')
+        except Exception as e: 
+            print(e)
+
+    elif choice == '2':
+        input_file = input('Enter input file name')
+        blacklist_from_file(api_key, input_file)
+
+    else:
+        fprint('Wrong input')
+
+
+
     
 
 if __name__ == "__main__":
 
-    try: 
-        api_key = get_api_key(HOST_NAME,USERNAME,PASSWORD)
-
-    except Exception as e: 
-        print(e)
-    
-    with open('ip_list.txt', 'r') as file:
-        for i in range(10):
-            ip = file.readline().strip()
-            object_name = f'bl_{ip}'
-
-            result = create_object(api_key, object_name, ip)
-            if "successfully" in result.lower():
-                add_object_to_group(api_key,OBJECT_GROUP,object_name)
-        print('IP addresses added to malicious group successfully')
-    
-    #init()
+    init()
