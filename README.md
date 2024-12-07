@@ -34,4 +34,4 @@ Please make sure to update tests as appropriate.
 ## TODO  
 
 - [ ] Interface the script  
-- [ ] Modularize the code  
+- [x] Modularize the code  
