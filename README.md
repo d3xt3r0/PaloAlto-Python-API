@@ -16,6 +16,10 @@ pip install -R REQUIREMENTS.txt
 python main.py
 ```
 
+### .env file structure
+
+![alt text](res/env-structure.png)
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first

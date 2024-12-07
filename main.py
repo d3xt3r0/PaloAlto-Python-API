@@ -11,8 +11,8 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 load_dotenv()
 
 HOST_NAME = os.getenv('HOST_NAME')
-USERNAME = os.getenv('USERNAME')
-PASSWORD = os.getenv('PASSWORD')
+USERNAME = os.getenv('PALO_USERNAME')
+PASSWORD = os.getenv('PALO_PASSWORD')
 OBJECT_GROUP = 'blacklist-ips'
 
 base_url = f"https://{HOST_NAME}/api/"
@@ -20,6 +20,7 @@ base_url = f"https://{HOST_NAME}/api/"
 def get_api_key(hostname, username, password): 
     url = f"https://{hostname}/api/" 
     data = f'user={username}&password={password}'
+
     payload = { 'type': 'keygen'} 
     headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
@@ -62,7 +63,7 @@ def get_abuse_ip_list():
     with open('abuse_ip_list.txt','w') as f:
         f.write(response.text)
 
-    print("File saved successfully")
+    print("File abuse_ip_list.txt saved successfully")
 
 
 def blacklist_from_file(api_key, filename):
@@ -72,7 +73,7 @@ def blacklist_from_file(api_key, filename):
             result = create_object(api_key, object_name, ip)
             if "successfully" in result.lower():
                 add_object_to_group(api_key,OBJECT_GROUP,object_name)
-                print('IP addresses added to malicious group successfully')
+        print('IP addresses added to malicious group successfully')
 
 
 def fprint(line):
@@ -82,13 +83,20 @@ def fprint(line):
         sleep(0.1)
 
 
+def commit(api_key):
+
+    url = f"https://{HOST_NAME}/api" 
+    response = requests.post(f'{url}?type=commit&key={api_key}&cmd=<commit></commit>', verify=False)
+    if response.status_code == 200:
+        print('Changes committed successfully. Please verify from GUI')
+
+
 def init():
     fprint('Hi Welcome!\n')
     fprint('Please choose option \n')
-    print(' [1] Fetch IP list from AbuseIPDB\n [2] Blacklist IP from file')
+    print(' [1] Fetch IP list from AbuseIPDB\n [2] Blacklist IP from file\n [3] Commit')
 
     choice = input('Enter your choice: ')
-    print(choice)
 
     try:
         api_key = get_api_key(HOST_NAME,USERNAME,PASSWORD)
@@ -99,20 +107,20 @@ def init():
     if choice == '1':
         try: 
             get_abuse_ip_list()
-            blacklist_from_file(api_key, 'abuse_ip_list.txt')
         except Exception as e: 
             print(e)
 
     elif choice == '2':
-        input_file = input('Enter input file name')
+        input_file = input('Enter input file name: ')
         blacklist_from_file(api_key, input_file)
+
+    elif choice == '3':
+        commit(api_key)
 
     else:
         fprint('Wrong input')
 
 
-
-    
 
 if __name__ == "__main__":
 
