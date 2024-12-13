@@ -13,7 +13,7 @@ load_dotenv()
 HOST_NAME = os.getenv('HOST_NAME')
 USERNAME = os.getenv('PALO_USERNAME')
 PASSWORD = os.getenv('PALO_PASSWORD')
-OBJECT_GROUP = 'blacklist-ips'
+OBJECT_GROUP = os.getenv('OBJECT_GROUP')
 
 base_url = f"https://{HOST_NAME}/api/"
 
