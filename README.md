@@ -35,6 +35,4 @@ Please make sure to update tests as appropriate.
 
 [Medium Post](https://medium.com/@itsprathap/automating-cyber-defense-unleash-pythons-power-for-effortless-firewall-management-0b743e2e083f)
 
-## TODO  
-
-- [x] Interface the script  
+## TODO   
