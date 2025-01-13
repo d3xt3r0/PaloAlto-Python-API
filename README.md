@@ -1,6 +1,7 @@
 # Palo Alto Python API 
 
-Python script for automating operations on Palo Alto firewalls using the PanOS API and requests library
+Python script for automating operations on Palo Alto firewalls using the PanOS API and requests library.
+A project to showcase the API capabilities for managing the Palo Alto firewalls.
 
 ## Installation
 
